@@ -1,0 +1,187 @@
+// Generate Single-page HTML Export
+//
+// https://github.com/archi-contribs/jarchi-single-page-html-export
+//
+// Requires jArchi - https://www.archimatetool.com/blog/2018/07/02/jarchi/
+//
+// This script creates a single HTML page which contains views contained into
+// selected folders. This HTML page makes heavy use of CSS tricks to create
+// a dynamic web application which doesn't rely on JavaScript.
+// This non-JS approach is by design to allow the file to be previewed when
+// stored on Onedrive Pro, MsTeams or SharePoint Document Library.
+//
+// Version 1.0 (2020/03/23) First version published
+//
+// Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie
+//
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without
+// restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following
+// conditions:
+//
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+// WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+
+load(__DIR__ + 'libs/nashorn-polyfills.js');
+load(__DIR__ + 'libs/underscore-min.js');
+
+console.show();
+console.clear();
+
+// Use Mustache.js-style templating
+_.templateSettings = {
+  interpolate: /\{\{(.+?)\}\}/g
+};
+
+var normalize = readFully(__DIR__ + 'resources/normalize.css', 'UTF-8');
+var regular = readFully(__DIR__ + 'resources/regular.css', 'UTF-8');
+var tplMainReport = _.template(readFully(__DIR__ + 'templates/main-report.tpl', 'UTF-8'));
+var tplVisibilityRules = _.template(readFully(__DIR__ + 'templates/visibility-rules.tpl', 'UTF-8'));
+var tplInputCheckbox = _.template(readFully(__DIR__ + 'templates/input-checkbox.tpl', 'UTF-8'));
+var tplTreeView = _.template(readFully(__DIR__ + 'templates/aside-tree-view.tpl', 'UTF-8'));
+var tplTreeFolder = _.template(readFully(__DIR__ + 'templates/aside-tree-folder.tpl', 'UTF-8'));
+var tplHeader = _.template(readFully(__DIR__ + 'templates/article-header.tpl', 'UTF-8'));
+var tplImage = _.template(readFully(__DIR__ + 'templates/article-image.tpl', 'UTF-8'));
+var tplArticleDocumentation = _.template(readFully(__DIR__ + 'templates/article-documentation.tpl', 'UTF-8'));
+var tplProperties = _.template(readFully(__DIR__ + 'templates/article-properties.tpl', 'UTF-8'));
+var tplElements = _.template(readFully(__DIR__ + 'templates/article-elements.tpl', 'UTF-8'));
+var tplRelationships = _.template(readFully(__DIR__ + 'templates/article-relationships.tpl', 'UTF-8'));
+
+var visibilityRules = '';
+var inputCheckbox = '';
+var treeFolder = '';
+var treeContent = '';
+var header =  '';
+var images = '';
+var documentation = '';
+var properties = '';
+var viewsIdsByConceptId = {};
+var elements = '';
+var elementsCollection;
+var elementsList = [];
+var relationships = '';
+var relationshipsCollection;
+var relationshipsList = [];
+
+var allFolders = $('folder');
+var viewsFolder = $(model).children().filter('folder.Views');
+var viewFolders = viewsFolder.find('folder');
+var nonViewFolders = allFolders.not(viewsFolder).not(viewFolders);
+
+var folders = selection.filter("folder").not(nonViewFolders);
+
+if(! folders.size()) {
+  window.alert('You have to select one or more folders containing views.\n\nHint: for a full model export, select "Views" folded.');
+  exit();
+}
+
+folders = _.sortBy(folders, function(f) { return f.name; });
+
+_.each(folders, function(f) {
+  exportViews(f);
+});
+
+function exportViews(folder) {
+  console.log('Exporting "', folder.name, '"...');
+  var previousContent = treeContent;
+  treeContent = '';
+  _.each(_.sortBy($(folder).children('folder'), function(f) { return f.name; }), function(f) {
+    exportViews(f)
+  });
+  _.each(_.sortBy($(folder).children('view'), function(v) { return v.name; }), function(v) {
+    // Generate report's fragments
+    treeContent += tplTreeView({viewId: 'id-'+v.id, viewName: _.escape(v.name)});
+    visibilityRules += tplVisibilityRules({viewId: 'id-'+v.id});
+    inputCheckbox += tplInputCheckbox({viewId: 'id-'+v.id});
+    header += tplHeader({viewId: 'id-'+v.id, viewName: _.escape(v.name)});
+    images += tplImage({viewId: 'id-'+v.id, viewImage: $.model.renderViewAsBase64(v, "PNG")});
+    documentation += tplArticleDocumentation({viewId: 'id-'+v.id, documentation: _.escape(v.documentation).replace(/\n/g, '<br>')});
+    
+    // Update lists of elements and relationships
+    $(v).find('element').each(function(e) {
+      if(elementsCollection) {
+        if(!elementsCollection.contains(e.concept)) elementsCollection.add($(e.concept));
+      } else {
+        elementsCollection = $(e.concept);
+      }
+      viewsIdsByConceptId[e.concept.id] += ' id-'+v.id;
+    });
+    $(v).find('relationship').each(function(r) {
+      if(relationshipsCollection) {
+        if(!relationshipsCollection.contains(r.concept)) relationshipsCollection.add($(r.concept));
+      } else {
+        relationshipsCollection = $(r.concept);
+      }
+      viewsIdsByConceptId[r.concept.id] += ' id-'+v.id;
+    });
+  });
+  treeContent = tplTreeFolder({folderId: 'id-'+folder.id, folderName: _.escape(folder.name), folderContent: treeContent});
+  treeContent = previousContent + treeContent;
+}
+
+elementsList = _.sortBy(elementsCollection, function(e) { return e.name; });
+relationshipsList = _.sortBy(relationshipsCollection, function(r) { return r.name; });
+
+_.each(elementsList, function(e) {
+  elements += tplElements({
+    viewsIds: viewsIdsByConceptId[e.id],
+    elementName: _.escape(e.name),
+    elementType: properCase(e.type),
+    elementDocumentation: _.escape(e.documentation).replace(/\n/g, '<br>')
+    });
+});
+
+_.each(relationshipsList, function(r) {
+  relationships += tplRelationships({
+    viewsIds: viewsIdsByConceptId[r.id],
+    relationshipName: _.escape(r.name),
+    relationshipType: properCase(r.type),
+    relationshipSource: _.escape(r.source.name),
+    relationshipTarget: _.escape(r.target.name),
+    relationshipDocumentation: _.escape(r.documentation).replace(/\n/g, '<br>')
+    });
+});
+
+var mainReport = tplMainReport({
+  normalize: normalize,
+  regular: regular,
+  modelTitle: _.escape(model.name),
+  visibilityRules: visibilityRules,
+  inputCheckbox: inputCheckbox,
+  treeContent: treeContent,
+  header: header,
+  images: images,
+  modelPurpose: _.escape(model.purpose).replace(/\n/g, '<br>'),
+  documentation: documentation,
+  properties: properties,
+  elements: elements,
+  relationships: relationships
+});
+
+var filePath = window.promptSaveFile();
+
+$.fs.writeFile(filePath, mainReport, 'UTF-8');
+
+console.log('Export terminated.');
+
+function properCase(str) {
+  return str.replace(
+    /\w*/g,
+    function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    }
+  ).replace('-', ' ');
+}
