@@ -84,7 +84,7 @@ var nonViewFolders = allFolders.not(viewsFolder).not(viewFolders);
 var folders = selection.filter("folder").not(nonViewFolders);
 
 if(! folders.size()) {
-  window.alert('You have to select one or more folders containing views.\n\nHint: for a full model export, select "Views" folded.');
+  window.alert('You have to select one or more folders containing views.\n\nHint: for a full model export, select the "Views" folder.');
   exit();
 }
 
