@@ -171,9 +171,11 @@ var mainReport = tplMainReport({
   relationships: relationships
 });
 
-var filePath = window.promptSaveFile();
+var filePath = window.promptSaveFile({ title: "Save as HTML file", filterExtensions : [ "*.html" , "*.*"], fileName : model.name + ".html" });
 
-$.fs.writeFile(filePath, mainReport, 'UTF-8');
+if(filePath) {
+  $.fs.writeFile(filePath, mainReport, 'UTF-8');
+}
 
 console.log('Export terminated.');
 
