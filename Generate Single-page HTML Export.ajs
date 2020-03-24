@@ -71,10 +71,8 @@ var properties = '';
 var viewsIdsByConceptId = {};
 var elements = '';
 var elementsCollection;
-var elementsList = [];
 var relationships = '';
 var relationshipsCollection;
-var relationshipsList = [];
 
 var allFolders = $('folder');
 var viewsFolder = $(model).children().filter('folder.Views');
@@ -88,9 +86,7 @@ if(! folders.size()) {
   exit();
 }
 
-folders = _.sortBy(folders, function(f) { return f.name; });
-
-_.each(folders, function(f) {
+_.chain(folders).sortBy(function(f) { return f.name; }).each(function(f) {
   exportViews(f);
 });
 
@@ -98,10 +94,10 @@ function exportViews(folder) {
   console.log('Exporting "', folder.name, '"...');
   var previousContent = treeContent;
   treeContent = '';
-  _.each(_.sortBy($(folder).children('folder'), function(f) { return f.name; }), function(f) {
+  _.chain($(folder).children('folder')).sortBy(function(f) { return f.name; }).each(function(f) {
     exportViews(f)
   });
-  _.each(_.sortBy($(folder).children('view'), function(v) { return v.name; }), function(v) {
+  _.chain($(folder).children('view')).sortBy(function(v) { return v.name; }).each(function(v) {
     // Generate report's fragments
     treeContent += tplTreeView({viewId: 'id-'+v.id, viewName: _.escape(v.name)});
     visibilityRules += tplVisibilityRules({viewId: 'id-'+v.id});
@@ -132,11 +128,8 @@ function exportViews(folder) {
   treeContent = previousContent + treeContent;
 }
 
-elementsList = _.sortBy(elementsCollection, function(e) { return e.name; });
-relationshipsList = _.sortBy(relationshipsCollection, function(r) { return r.name; });
-
-_.each(elementsList, function(e) {
-  elements += tplElements({
+_.chain(elementsCollection).sortBy(function(e) { return e.name; }).each(function(e) {
+    elements += tplElements({
     viewsIds: viewsIdsByConceptId[e.id],
     elementName: _.escape(e.name),
     elementType: properCase(e.type),
@@ -144,8 +137,8 @@ _.each(elementsList, function(e) {
     });
 });
 
-_.each(relationshipsList, function(r) {
-  relationships += tplRelationships({
+_.chain(relationshipsCollection).sortBy(function(r) { return r.name; }).each(function(r) {
+    relationships += tplRelationships({
     viewsIds: viewsIdsByConceptId[r.id],
     relationshipName: _.escape(r.name),
     relationshipType: properCase(r.type),
