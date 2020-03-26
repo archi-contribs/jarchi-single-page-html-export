@@ -37,19 +37,39 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
   		height: 60px;
   		line-height: 60px;
   		z-index: 1000;
+  		transition: all .3s;
+		}
+		nav label[for=menu] {
+			font-size: 35px;
+		}
+		nav label[for=id-model] {
+			padding-left: 10px;
+		}
+		nav * {
+			display: table-cell;
+    	vertical-align: middle;
 		}
 		aside {
 			margin: 0;
-			margin-top: 60px;
 			padding: 0;
-			padding-left: 10px;
-			width: 340px;
+			width: 350px;
 			background-color: #37474f;
 			color: #DDDDDD;
-			height: calc(100% - 60px); /* 100% - nav.height */
-			top:0;
+			height: 100%; /* 100% - nav.height */
 			position: fixed; /* Make it stick, even on scroll */
-			overflow: auto; /* Enable scrolling if the sidenav has too much content */
+			top:0;
+		}
+		aside header {
+			height: 60px; /* Same as nav */
+			padding: 0 10px;
+		  vertical-align: middle;
+		  display: table-cell;
+		}
+		aside header label[for=menu] {
+			position: absolute;
+			top: 10px;
+			right: 20px;
+			font-size: 35px;
 		}
 		article {
 			margin-top: 60px;
@@ -63,22 +83,13 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 		#menu:checked ~ article {
 				margin-left: 350px;
 		}
-		#menu:checked ~ nav label[for=menu]::before {
-			content: "×";
+		#menu:checked ~ nav {
+				margin-left: 350px;
 		}
-		#menu:not(checked) ~ nav label[for=menu]::before {
-			content: "☰";
+		#menu:checked ~ nav label[for=menu] {
+			display: none;
 		}
-		label[for=menu] {
-			text-align: center;
-			font-size: 35px;
-			width: 45px;
-		}
-		nav * {
-			display: table-cell;
-    	vertical-align: middle;
-		}
-		header {
+		article header {
 			background-color: #eceff1;
 			margin: -20px -20px 0 -20px;
 			padding: 20px;
@@ -177,9 +188,12 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 		}
 		/* TREE ================================================= */
 		ol.tree {
-			padding: 0 0 0 20px;
-			width: 300px;
-			font-size: small;
+			padding-left: 30px;
+			padding-right: 10px;
+			margin: 0;
+			font-size: smaller;
+			height: calc(100% - 60px);
+			overflow: auto; /* Enable scrolling if the sidenav has too much content */
 		}
 		ol.tree li {
 			position: relative;
@@ -255,13 +269,17 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 		{{inputCheckbox}}
 
 		<aside class="navigation">
+			<header>
+			  <h3>Content</h3>
+			  <label for="menu">×</label>
+			</header>
 			<ol class="tree">
 				{{treeContent}}
 			</ol>
 		</aside>
 
 		<nav>
-			<label for="menu"></label>
+			<label for="menu">☰</label>
 			<label for="id-model">
 				<h3>{{modelTitle}}</h3>
 			</label>
