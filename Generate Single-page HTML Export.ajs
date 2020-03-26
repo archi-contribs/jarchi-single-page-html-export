@@ -37,6 +37,7 @@
 
 load(__DIR__ + 'libs/nashorn-polyfills.js');
 load(__DIR__ + 'libs/underscore-min.js');
+load(__DIR__ + 'libs/marked.min.js');
 
 console.show();
 console.clear();
@@ -44,6 +45,12 @@ console.clear();
 // Use Mustache.js-style templating
 _.templateSettings = {
   interpolate: /\{\{(.+?)\}\}/g
+};
+
+// Set Markdown rendering options
+var mdOptions = {
+  gfm: true,
+  breaks: true
 };
 
 var normalize = readFully(__DIR__ + 'resources/normalize.css', 'UTF-8');
@@ -104,7 +111,7 @@ function exportViews(folder) {
     inputCheckbox += tplInputCheckbox({viewId: 'id-'+v.id});
     header += tplHeader({viewId: 'id-'+v.id, viewName: _.escape(v.name)});
     images += tplImage({viewId: 'id-'+v.id, viewImage: $.model.renderViewAsBase64(v, "PNG")});
-    documentation += tplArticleDocumentation({viewId: 'id-'+v.id, documentation: _.escape(v.documentation).replace(/\n/g, '<br>')});
+    documentation += tplArticleDocumentation({viewId: 'id-'+v.id, documentation: marked(_.escape(v.documentation), mdOptions)});
     
     // Update lists of elements and relationships
     $(v).find('element').each(function(e) {
@@ -133,7 +140,7 @@ _.chain(elementsCollection).sortBy(function(e) { return e.name; }).each(function
     viewsIds: viewsIdsByConceptId[e.id],
     elementName: _.escape(e.name),
     elementType: properCase(e.type),
-    elementDocumentation: _.escape(e.documentation).replace(/\n/g, '<br>')
+    elementDocumentation: marked(_.escape(e.documentation), mdOptions)
     });
 });
 
@@ -144,7 +151,7 @@ _.chain(relationshipsCollection).sortBy(function(r) { return r.name; }).each(fun
     relationshipType: properCase(r.type),
     relationshipSource: _.escape(r.source.name),
     relationshipTarget: _.escape(r.target.name),
-    relationshipDocumentation: _.escape(r.documentation).replace(/\n/g, '<br>')
+    relationshipDocumentation: marked(_.escape(r.documentation), mdOptions)
     });
 });
 
@@ -157,7 +164,7 @@ var mainReport = tplMainReport({
   treeContent: treeContent,
   header: header,
   images: images,
-  modelPurpose: _.escape(model.purpose).replace(/\n/g, '<br>'),
+  modelPurpose: marked(_.escape(model.purpose)),
   documentation: documentation,
   properties: properties,
   elements: elements,
