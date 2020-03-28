@@ -1,3 +1,4 @@
 <div class="hidden {{viewId}}">
-{{documentation}}
+<span class="txt">{{documentationText}}</span>
+<span class="md">{{documentationMarkdown}}</span>
 </div>

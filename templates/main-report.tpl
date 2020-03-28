@@ -11,14 +11,16 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
   <head>
     <meta charset="utf-8">
     <title>{{modelTitle}}</title>
-    <!-- <link rel="stylesheet" href="normalize.css"> -->
-	<style>
-	{{normalize}}
-	</style>
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> -->
-	<style>
-	{{regular}}
-	</style>
+<!--
+    <link rel="stylesheet" href="../resources/normalize.css">
+  	<link rel="stylesheet" href="../resources/picnic.css">
+    <link rel="stylesheet" href="../resources/regular.css">
+-->
+		<style>
+		{{normalize}}
+    {{picnic}}
+		{{regular}}
+		</style>
 	<style>
 		body {
 			font-family: 'Roboto', sans-serif;
@@ -35,19 +37,22 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
   		position: fixed;
   		width: 100%;
   		height: 60px;
-  		line-height: 60px;
   		z-index: 1000;
   		transition: all .3s;
 		}
 		nav label[for=menu] {
-			font-size: 35px;
+			float: left;
+			position: relative;
+			top: 8px;
 		}
 		nav label[for=id-model] {
 			padding-left: 10px;
+			float: left;
 		}
-		nav * {
-			display: table-cell;
-    	vertical-align: middle;
+		nav label[for=preferences] {
+			position: fixed;
+			top: 8px;
+			right: 10px;
 		}
 		aside {
 			margin: 0;
@@ -67,7 +72,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 		}
 		aside header label[for=menu] {
 			position: absolute;
-			top: 10px;
+			top: 8px;
 			right: 20px;
 			font-size: 35px;
 		}
@@ -252,8 +257,68 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 		ol.tree li input:checked + ol > li:last-child {
 			margin: 0 0 0.063em; /* 1px */
 		}
+		/* MODAL ================================================= */
+		.right {
+			float: right;
+		}
+		.switch {
+			position: relative;
+			display: inline-block;
+		}
+		.switch-label {
+			display: block;
+			width: 48px;
+			height: 24px;
+			text-indent: -150%;
+			clip: rect(0 0 0 0);
+			color: transparent;
+			user-select: none;
+		}
+		.switch-label::before,
+		.switch-label::after {
+			content: "";
+			display: block;
+			position: absolute;
+			cursor: pointer;
+		}
+		.switch-label::before {
+			width: 100%;
+			height: 100%;
+			background-color: #dedede;
+			border-radius: 9999em;
+			-webkit-transition: background-color 0.25s ease;
+			transition: background-color 0.25s ease;
+		}
+		.switch-label::after {
+			top: 0;
+			left: 0;
+			width: 24px;
+			height: 24px;
+			border-radius: 50%;
+			background-color: #fff;
+			box-shadow: 0 0 2px rgba(0, 0, 0, 0.45);
+			-webkit-transition: left 0.25s ease;
+			transition: left 0.25s ease;
+		}
+		#markdown:checked ~ div .switch-label[for=markdown]::before {
+			background-color: #0074D9;
+		}
+		#markdown:checked ~ div .switch-label[for=markdown]::after {
+			left: 24px;
+		}
+		/* ICONS ================================================= */
+		.icon:hover {
+			background: #ffffff3d;
+			border-radius: 50%;
+		}
+		.icon {
+			font-size: 37px;
+		  height: 44px;
+		  width: 44px;
+		  text-align: center;
+		}
 		/* VISIBILITY RULES ================================================= */
-		.hidden {
+		.hidden, #markdown:checked ~ article span.txt, #markdown:not(:checked) ~ article span.md {
 			position: absolute;
 			left: -9999999px;
 		}
@@ -265,13 +330,36 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
   </head>
 	<body>
 		<input type="checkbox" id="menu" checked>
+		<input type="checkbox" id="markdown" checked>
 		<input id='id-model' type='radio' name='views' checked>
 		{{inputCheckbox}}
 
+		<div class="modal">
+			<input id="preferences" type="checkbox" />
+			<label for="preferences" class="overlay"></label>
+			<div>
+				<header>
+				  <h3>Preferences</h3>
+				  <label for="preferences" class="close">&times;</label>
+				</header>
+				<section class="content" style="min-width:500px;min-height:100px;">
+				  Use Markdown for documentations:
+				  <div class="switch right">
+				  	<label for="markdown" class="switch-label">Switch</label>
+				  </div>
+				</section>
+				<footer>
+				  <label for="preferences" class="button right">
+				    OK
+				  </label>
+				</footer>
+			</div>
+		</div>
+		
 		<aside class="navigation">
 			<header>
 			  <h3>Content</h3>
-			  <label for="menu">×</label>
+			  <label for="menu" class="icon">×</label>
 			</header>
 			<ol class="tree">
 				{{treeContent}}
@@ -279,10 +367,11 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 		</aside>
 
 		<nav>
-			<label for="menu">☰</label>
-			<label for="id-model">
+			<label for="menu" class="icon">☰</label>
+			<label for="id-model"">
 				<h3>{{modelTitle}}</h3>
 			</label>
+			<label for="preferences" class="icon">⚙</label>
 		</nav>
 
 		<article>
@@ -303,7 +392,10 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				<label for="tab-4">Relationships</label>
 				<div class="row" style="text-align: left;">
 					<div>
-						<div class="hidden id-model">{{modelPurpose}}</div>
+						<div class="hidden id-model">
+							<span class="txt">{{modelPurposeText}}</span>
+							<span class="md">{{modelPurposeMarkdown}}</span>
+						</div>
 						{{documentation}}
 					</div>
 					
