@@ -26,6 +26,9 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 			font-family: 'Roboto', sans-serif;
 			margin: 0;
 		}
+		.pointer {
+			cursor: pointer;
+		}
 		nav {
 			margin: 0;
 			padding: 0;
@@ -359,7 +362,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 		<aside class="navigation">
 			<header>
 			  <h3>Content</h3>
-			  <label for="menu" class="icon">×</label>
+			  <label for="menu" class="icon pointer">×</label>
 			</header>
 			<ol class="tree">
 				{{treeContent}}
@@ -367,11 +370,11 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 		</aside>
 
 		<nav>
-			<label for="menu" class="icon">☰</label>
+			<label for="menu" class="icon pointer">☰</label>
 			<label for="id-model"">
 				<h3>{{modelTitle}}</h3>
 			</label>
-			<label for="preferences" class="icon">⚙</label>
+			<label for="preferences" class="icon pointer">⚙</label>
 		</nav>
 
 		<article>
@@ -385,11 +388,11 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 
 			<div class="tabs three" style="text-align: center;">
 				<input id='tab-1' type='radio' name='tabgroup' checked />
-				<label for="tab-1">Documentation</label>
+				<label for="tab-1" class="pointer">Documentation</label>
 				<input id='tab-3' type='radio' name='tabgroup'>
-				<label for="tab-3">Elements</label>
+				<label for="tab-3" class="pointer">Elements</label>
 				<input id='tab-4' type='radio' name='tabgroup'>
-				<label for="tab-4">Relationships</label>
+				<label for="tab-4" class="pointer">Relationships</label>
 				<div class="row" style="text-align: left;">
 					<div>
 						<div class="hidden id-model">
