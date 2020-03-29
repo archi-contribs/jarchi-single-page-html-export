@@ -1,6 +1,6 @@
 ## Generate Single-page HTML Export
 
-![image](https://user-images.githubusercontent.com/5757396/77357263-23910180-6d48-11ea-8dbd-17ae6c0edb78.png)
+![image](https://user-images.githubusercontent.com/5757396/77847822-295f6a80-71c0-11ea-9619-956467214207.png)
 
 Requires [jArchi](https:www.archimatetool.com/blog/2018/07/02/jarchi/)
 
@@ -9,6 +9,10 @@ selected folders. This HTML page makes heavy use of CSS tricks to create
 a dynamic web application which doesn't rely on JavaScript.
 This non-JS approach is by design to allow the file to be previewed when
 stored on Onedrive Pro, MsTeams or SharePoint Document Library.
+
+To use it, simply download the archive from the [latest release](https://github.com/archi-contribs/jarchi-single-page-html-export/releases) and unzip it in your `scripts` folder. Then select one or more folders containing views and run the script through the context menu.
+
+Mardown rendering of documentations is `on` by default. You can set it `off` in the "Preferences" dialog (cog icon on top right).
 
 Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie
 
