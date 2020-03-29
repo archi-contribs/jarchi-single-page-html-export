@@ -59,7 +59,9 @@ var normalize = readFully(__DIR__ + 'resources/normalize.css', 'UTF-8');
 var picnic = readFully(__DIR__ + 'resources/picnic.css', 'UTF-8');
 var regular = readFully(__DIR__ + 'resources/regular.css', 'UTF-8');
 var tplMainReport = _.template(readFully(__DIR__ + 'templates/main-report.tpl', 'UTF-8'));
-var tplVisibilityRules = _.template(readFully(__DIR__ + 'templates/visibility-rules.tpl', 'UTF-8'));
+var tplVisibilityRulesAside = _.template(readFully(__DIR__ + 'templates/visibility-rules-aside.tpl', 'UTF-8'));
+var tplVisibilityRulesArticle = _.template(readFully(__DIR__ + 'templates/visibility-rules-article.tpl', 'UTF-8'));
+var tplVisibilityRulesArticleTarget = _.template(readFully(__DIR__ + 'templates/visibility-rules-article-target.tpl', 'UTF-8'));
 var tplInputCheckbox = _.template(readFully(__DIR__ + 'templates/input-checkbox.tpl', 'UTF-8'));
 var tplTreeView = _.template(readFully(__DIR__ + 'templates/aside-tree-view.tpl', 'UTF-8'));
 var tplTreeFolder = _.template(readFully(__DIR__ + 'templates/aside-tree-folder.tpl', 'UTF-8'));
@@ -70,7 +72,9 @@ var tplProperties = _.template(readFully(__DIR__ + 'templates/article-properties
 var tplElements = _.template(readFully(__DIR__ + 'templates/article-elements.tpl', 'UTF-8'));
 var tplRelationships = _.template(readFully(__DIR__ + 'templates/article-relationships.tpl', 'UTF-8'));
 
-var visibilityRules = '';
+var visibilityRulesAside = '';
+var visibilityRulesArticle = '';
+var visibilityRulesArticleTarget = '';
 var inputCheckbox = '';
 var treeFolder = '';
 var treeContent = '';
@@ -110,7 +114,9 @@ function exportViews(folder) {
   _.chain($(folder).children('view')).sortBy(function(v) { return v.name; }).each(function(v) {
     // Generate report's fragments
     treeContent += tplTreeView({viewId: 'id-'+v.id, viewName: _.escape(v.name)});
-    visibilityRules += tplVisibilityRules({viewId: 'id-'+v.id});
+    visibilityRulesAside += tplVisibilityRulesAside({viewId: 'id-'+v.id});
+    visibilityRulesArticle += tplVisibilityRulesArticle({viewId: 'id-'+v.id});
+    visibilityRulesArticleTarget += tplVisibilityRulesArticleTarget({viewId: 'id-'+v.id});
     inputCheckbox += tplInputCheckbox({viewId: 'id-'+v.id});
     header += tplHeader({viewId: 'id-'+v.id, viewName: _.escape(v.name)});
     images += tplImage({viewId: 'id-'+v.id, viewImage: $.model.renderViewAsBase64(v, "PNG")});
@@ -144,23 +150,23 @@ function exportViews(folder) {
 
 _.chain(elementsCollection).sortBy(function(e) { return e.name; }).each(function(e) {
     elements += tplElements({
-    viewsIds: viewsIdsByConceptId[e.id],
-    elementName: _.escape(e.name),
-    elementType: properCase(e.type),
-    elementDocumentationText: _.escape(e.documentation).replace(/\n/g, '<br>'),
-    elementDocumentationMarkdown: marked(_.escape(e.documentation), mdOptions)
+      viewsIds: viewsIdsByConceptId[e.id],
+      elementName: _.escape(e.name),
+      elementType: properCase(e.type),
+      elementDocumentationText: _.escape(e.documentation).replace(/\n/g, '<br>'),
+      elementDocumentationMarkdown: marked(_.escape(e.documentation), mdOptions)
     });
 });
 
 _.chain(relationshipsCollection).sortBy(function(r) { return r.name; }).each(function(r) {
     relationships += tplRelationships({
-    viewsIds: viewsIdsByConceptId[r.id],
-    relationshipName: _.escape(r.name),
-    relationshipType: properCase(r.type),
-    relationshipSource: _.escape(r.source.name),
-    relationshipTarget: _.escape(r.target.name),
-    relationshipDocumentationText: _.escape(r.documentation).replace(/\n/g, '<br>'),
-    relationshipDocumentationMarkdown: marked(_.escape(r.documentation), mdOptions)
+      viewsIds: viewsIdsByConceptId[r.id],
+      relationshipName: _.escape(r.name),
+      relationshipType: properCase(r.type),
+      relationshipSource: _.escape(r.source.name),
+      relationshipTarget: _.escape(r.target.name),
+      relationshipDocumentationText: _.escape(r.documentation).replace(/\n/g, '<br>'),
+      relationshipDocumentationMarkdown: marked(_.escape(r.documentation), mdOptions)
     });
 });
 
@@ -169,7 +175,9 @@ var mainReport = tplMainReport({
   picnic: picnic,
   regular: regular,
   modelTitle: _.escape(model.name),
-  visibilityRules: visibilityRules,
+  visibilityRulesAside: visibilityRulesAside,
+  visibilityRulesArticle: visibilityRulesArticle,
+  visibilityRulesArticleTarget: visibilityRulesArticleTarget,
   inputCheckbox: inputCheckbox,
   treeContent: treeContent,
   header: header,

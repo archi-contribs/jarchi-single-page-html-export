@@ -1,0 +1,1 @@
+, #{{viewId}}:target ~ article .{{viewId}}

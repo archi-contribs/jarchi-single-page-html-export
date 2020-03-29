@@ -48,7 +48,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 			position: relative;
 			top: 8px;
 		}
-		nav label[for=id-model] {
+		nav label[for=model] {
 			padding-left: 10px;
 			float: left;
 		}
@@ -216,7 +216,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 			color: #DDDDDD;
 			padding-left: 21px;
 			text-decoration: none;
-			display: block;
+			/* display: block; */
 		}
 		ol.tree li.view input:checked + label{
 			font-weight: 700;
@@ -325,16 +325,49 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 			position: absolute;
 			left: -9999999px;
 		}
-		#id-model:checked ~ article .id-model {
-			position: static;
+		:target ~ article .hidden {
+			position: absolute !important;
+			left: -9999999px !important;
 		}
-		{{visibilityRules}}
+		/* Links in model tree are hiddent by default */
+    aside ol.tree li.view a,
+    nav a {
+      display: none;
+    }
+    nav a {
+      text-decoration: none;
+      color: #fff;
+      padding-left: 10px;
+    }
+    /* Linked in model tree are revealed if :target matches */
+    :target ~ aside ol.tree li.view a,
+    :target ~ nav a {
+      display: block;
+    }
+    /* Labels in model tree are visible by default but hidden if :target matches */
+    :target ~ aside ol.tree li.view label,
+    :target ~ nav label[for=model] {
+      display: none;
+    }
+    #model:target ~ aside a[href*="#model"]
+		, #model:checked ~ aside label[for=model]
+		{{visibilityRulesAside}} {
+		  font-weight: 700;
+		}
+		#model:checked ~ article .model
+		{{visibilityRulesArticle}} {
+		  position: static;
+		}
+		#model:target ~ article .model
+		{{visibilityRulesArticleTarget}} {
+		  position: static !important;
+		}
 	</style>
   </head>
 	<body>
 		<input type="checkbox" id="menu" checked>
 		<input type="checkbox" id="markdown" checked>
-		<input id='id-model' type='radio' name='views' checked>
+		<input id='model' type='radio' name='views' checked>
 		{{inputCheckbox}}
 
 		<div class="modal">
@@ -371,19 +404,22 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 
 		<nav>
 			<label for="menu" class="icon pointer">☰</label>
-			<label for="id-model"">
+			<label for="model">
 				<h3>{{modelTitle}}</h3>
 			</label>
+			<a href="#model">
+				<h3>{{modelTitle}}</h3>
+			</a>
 			<label for="preferences" class="icon pointer">⚙</label>
 		</nav>
 
 		<article>
 			<header>
-			 	<h2 class="hidden id-model">{{modelTitle}}</h2>
+			 	<h2 class="hidden model">{{modelTitle}}</h2>
 				{{header}}
 			</header>
 
-			<img class="hidden id-model">
+			<img class="hidden model">
 			{{images}}
 
 			<div class="tabs three" style="text-align: center;">
@@ -395,7 +431,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				<label for="tab-4" class="pointer">Relationships</label>
 				<div class="row" style="text-align: left;">
 					<div>
-						<div class="hidden id-model">
+						<div class="hidden model">
 							<span class="txt">{{modelPurposeText}}</span>
 							<span class="md">{{modelPurposeMarkdown}}</span>
 						</div>
