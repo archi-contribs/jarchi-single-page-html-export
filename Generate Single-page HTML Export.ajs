@@ -96,6 +96,13 @@ if(! folders.size()) {
   exit();
 }
 
+var filePath = window.promptSaveFile({ title: "Save as HTML file", filterExtensions : [ "*.html" , "*.*"], fileName : model.name + ".html" });
+
+if(!filePath) {
+  console.log('User cancelled.');
+  exit();
+}
+
 _.chain(folders).sortBy(function(f) { return f.name; }).each(function(f) {
   exportViews(f);
 });
@@ -182,11 +189,7 @@ var mainReport = tplMainReport({
   relationships: relationships
 });
 
-var filePath = window.promptSaveFile({ title: "Save as HTML file", filterExtensions : [ "*.html" , "*.*"], fileName : model.name + ".html" });
-
-if(filePath) {
-  $.fs.writeFile(filePath, mainReport, 'UTF-8');
-}
+$.fs.writeFile(filePath, mainReport, 'UTF-8');
 
 console.log('Export terminated.');
 
