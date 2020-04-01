@@ -371,7 +371,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 
 		<nav>
 			<label for="menu" class="icon pointer">☰</label>
-			<label for="id-model"">
+			<label for="id-model" class="pointer">
 				<h3>{{modelTitle}}</h3>
 			</label>
 			<label for="preferences" class="icon pointer">⚙</label>
