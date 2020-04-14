@@ -93,7 +93,7 @@ var folders = selection.filter("folder").not(nonViewFolders);
 
 if(! folders.size()) {
   folders = viewsFolder;
-  console.log("All views has been selected.");
+  console.log("All views have been selected.");
 }
 
 var filePath = window.promptSaveFile({ title: "Save as HTML file", filterExtensions : [ "*.html" , "*.*"], fileName : model.name + ".html" });
