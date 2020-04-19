@@ -56,7 +56,6 @@ var mdOptions = {
 var roboto = readFully(__DIR__ + 'resources/roboto.css', 'UTF-8');
 var icon = readFully(__DIR__ + 'resources/icon.css', 'UTF-8');
 var picnic = readFully(__DIR__ + 'resources/picnic-custom.css', 'UTF-8');
-var toggleswitch = readFully(__DIR__ + 'resources/toggleswitch.css', 'UTF-8');
 
 var tplMainReport = _.template(readFully(__DIR__ + 'templates/main-report.html', 'UTF-8'));
 var tplVisibilityRuleBold = _.template(readFully(__DIR__ + 'templates/visibility-rule-bold.tpl', 'UTF-8'));
@@ -176,7 +175,6 @@ var mainReport = tplMainReport({
   roboto: roboto,
   icon: icon,
   picnic: picnic,
-  toggleswitch: toggleswitch,
   modelTitle: _.escape(model.name),
   visibilityRulesBold: visibilityRulesBold,
   visibilityRulesReveal: visibilityRulesReveal,

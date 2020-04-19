@@ -16,16 +16,14 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
     <link rel="stylesheet" href="../resources/roboto.css">
     <link rel="stylesheet" href="../resources/icon.css">
     <link rel="stylesheet" href="../resources/picnic-custom.css">
-    <link rel="stylesheet" href="../resources/switch.css">
 !-->
 		<style>
 		{{roboto}}
 		{{icon}}
     {{picnic}}
-		{{toggleswitch}}
 		</style>
 	  <style>
-	  	/* Application wide configuration */
+/* Application wide configuration */
 	  	:root {
 	  		--sidebar-bg-color: #37474f;
 	  		--sidebar-color: #DDDDDD;
@@ -42,8 +40,8 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 	  		--main-header-bg-color: #eceff1;
 	  		--main-header-color: #546e7a;
 	  	}
-	  	
-	  	/* Generic style */
+
+/* Generic style */
 		  body {
 			  font-family: 'Roboto';
 			  margin: 0; 							/* needed for Sharepoint/OneDrive preview */
@@ -51,13 +49,16 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 		  label {
 		  	cursor: pointer;
 		  }
-		  
-		  /* Utilities */
+
+/* Utilities */
   		.right {
 				float: right;
 			}
 			.left {
 				float: left;
+			}
+			.text-right {
+				text-align: right;
 			}
 			.spacer {
 				/* Used only inside a "flex" container */
@@ -67,8 +68,8 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 			table.fixed {
 				table-layout: fixed;
 			}
-		  
-		  /* Icons */
+
+/* Icons */
 		  .icon {
 		  	font-family: 'Icon';		/* 'Icon' font is based on a FontAwesome subset */
   			font-size: 27px;				/* main size of the icon, can be overriden */
@@ -91,8 +92,8 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 		  .icon.table::before { content: "table"; }
 		  /* using 'bar-chart' with char code to avoid space issue */
 		  .icon.chart::before { content: "\f080"; }
-		  
-		  /* Override some Picnic defaults */
+
+/* Override some Picnic defaults */
 		  /* Picnic Tabs */
 	  	.tabs {
 		  	margin-top: var(--main-margin);	/* set some space above tabs */
@@ -133,8 +134,8 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				border-right: 1px solid #dddddd;
 				border-bottom: 1px solid #dddddd;
 			}
-		  
-		  /* Navigation Behavior */
+
+/* Navigation Behavior */
 		  /* hide some elements by default */
 		  .hidden
 		  /* which report mode? */
@@ -149,8 +150,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 		  	display: none;
 		  }
 
-		  
-		  /* Expandable Behavior */
+/* Expandable Behavior */
 		  .expandable {
 		  	width: 100%;						/* by default use full width */
 				transition: all .3s;		/* make switching state a bit fun */
@@ -159,8 +159,8 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				margin-left: var(--sidebar-width);				/* add some space for sidebar */
 				width: calc(100% - var(--sidebar-width));	/* reset width */
 		  }
-		  
-		  /* Sidebar Style */
+
+/* Sidebar Style */
 		  .sidebar {
 				position: fixed; 				/* make it stick, even on scroll */
 				top: 0;									/* stick to top */
@@ -214,15 +214,15 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 			.sidebar ::-webkit-scrollbar-thumb:hover {
 				background: #000000dd;	/* on hover, thums is even more darker */
 			}
-			
-		  /* Common Top Header Style */
+
+/* Common Top Header Style */
 			.top-header {
 				position: fixed;				/* headers are fixed on top */
 				top: 0;
 				height: var(--header-height);
 			}
-			
-			/* Main-Header Style */
+
+/* Main-Header Style */
 			#main-header {
 				display: flex;					/* this is the trick to middle align buttons and title */
 			}
@@ -250,8 +250,8 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				   we remove it from right margin */
 				margin-right: calc(var(--main-margin) - 10px);
 		  }
-		  
-			/* Main-section Style */
+
+/* Main-section Style */
 			#main-header {
 				background-color: var(--header-bg-color);
 				color: var(--header-color);
@@ -269,8 +269,8 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 		  	padding: var(--main-margin);
 		  	padding-top: 0;
 		  }
-		  
-		  /* Main Content */
+
+/* Main Content */
 		  article header {
 				margin: 0 calc(-1 * var(--main-margin));
 				padding: var(--main-header-margin) var(--main-margin);
@@ -287,8 +287,8 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				max-width: 100%;
 				margin-top: var(--main-margin);	/* only set top margin because bottom is set by tabs */
 			}
-		  
-		  /* Tree */
+
+/* Tree */
 		  div.tree {
 		  	--tree-margin: 1.3em;		/* is equal to the icon width with a small additional space */
 		  	padding-left: var(--tree-margin);
@@ -323,8 +323,24 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				content: "share-alt-square";	/* that's the best I found to suggest a view */
 				color: #65a8e3;					/* blue taken from original Archi view icon */
 			}
-			
-			/* Generated hidden/reveal rules */
+
+/* Toggle Switch */
+			label.switch::before {
+		  	font-family: 'Icon';		/* use icon font */
+				font-size: 35px;				/* seems to be just right */
+				margin-top: -0.3em;			/* provide the best rendering so far */
+				display: inline-block;	/* needed for transform to work */
+				color: #DDDDDD;					/* light grey */
+				transform: rotate(180deg);	/* when off, the toggle icon is reversed */
+				content: "\f205";				/* 'toggle-on' from FontAwesome */
+			}
+			input:checked ~ label.switch::before
+			, #markdown:checked ~ * label.switch[for=markdown]::before {
+				transform: rotate(0deg);				/* when on, the toggle icon is used as-is */
+				color: var(--header-bg-color);	/* use the main accent color */
+			}
+
+/* Generated hidden/reveal rules */
 			#id-1:checked ~ * label[for=id-1]
 			{{visibilityRulesBold}} {
 				font-weight: 700;				/* selected view label is bold in tree */
@@ -350,10 +366,6 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 
 		<!-- One checkbox per view -->
 		<input id='id-model' type='radio' name='views' checked>
-		<input id='id-1' type='radio' name='views'>
-		<input id='id-2' type='radio' name='views'>
-		<input id='id-3' type='radio' name='views'>
-		<input id='id-4' type='radio' name='views'>
 		{{inputCheckbox}}
 
 		<!-- Modal dialogs -->
@@ -365,11 +377,15 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				  <h3>Preferences</h3>
 				  <label for="preferences" class="close">&times;</label>
 				</header>
-				<section class="content" style="min-width:500px;min-height:100px;">
-				  Use Markdown for documentations:
-				  <div class="switch right">
-				  	<label for="markdown" class="switch-label">Switch</label>
-				  </div>
+				<section style="min-width:500px;min-height:100px;">
+					<div class="flex" >
+						<div class="four-fifth">
+							Use Markdown for documentations:
+						</div>
+						<div class="fifth text-right">
+							<label for="markdown" class="switch"></label>
+						</div>
+					<div>
 				</section>
 				<footer>
 				  <label for="preferences" class="button right">
@@ -416,7 +432,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				<span class="js-only spacer"></span>
 			</nav>
 		</aside>
-		
+
 		<header id="main-header" class="top-header expandable">
 			<label for="sidebar" id="show-sidebar" class="icon menu"></label>
 			<label for="id-model">
@@ -425,7 +441,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 			<span class="spacer"></span>
 			<label for="preferences" id="show-preferences" class="icon gear"></label>
 		</header>
-		
+
 		<main class="expandable">
 			<article class="views">
 				<header>
@@ -490,12 +506,12 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				</header>
 			</article>
 		</main>
-		
-			<script>
-				// If javascript is enabled (ie. this report is NOT opened from
-				// within SharePoint or OneDrive), let's check 'javascript' input
-				document.getElementById("javascript").checked = true;
-			</script>
+
+		<script>
+			// If javascript is enabled (ie. this report is NOT opened from
+			// within SharePoint or OneDrive), let's check 'javascript' input
+			document.getElementById("javascript").checked = true;
+		</script>
 	</body>
 </html>
 
