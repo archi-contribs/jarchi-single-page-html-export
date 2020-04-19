@@ -1,6 +1,6 @@
 ## Generate Single-page HTML Export
 
-![image](https://user-images.githubusercontent.com/5757396/77847822-295f6a80-71c0-11ea-9619-956467214207.png)
+![image](https://user-images.githubusercontent.com/5757396/79693148-50620700-8269-11ea-9223-b5a384c9421f.png)
 
 Requires [jArchi](https:www.archimatetool.com/blog/2018/07/02/jarchi/)
 
