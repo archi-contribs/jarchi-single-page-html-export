@@ -17,7 +17,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
     <link rel="stylesheet" href="../resources/roboto.css">
     <link rel="stylesheet" href="../resources/icon.css">
     <link rel="stylesheet" href="../resources/picnic-custom.css">
-!-->
+-->
 		<style>
 			{{roboto}}
 			{{icon}}
@@ -338,6 +338,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				color: #DDDDDD;					/* light grey */
 				transform: rotate(180deg);	/* when off, the toggle icon is reversed */
 				content: "\f205";				/* 'toggle-on' from FontAwesome */
+				transition: color 0.1s;
 			}
 			input:checked ~ label.switch::before
 			, #markdown:checked ~ * label.switch[for=markdown]::before {
