@@ -186,7 +186,22 @@ var mainReport = tplMainReport({
   modelPurposeMarkdown: marked(_.escape(model.purpose), mdOptions),
   viewDocumentations: viewDocumentations,
   elements: elements,
-  relationships: relationships
+  relationships: relationships,
+  sidebarBgColor: '#37474f',
+	sidebarColor: '#DDDDDD',
+	sidebarWidth: '350px',
+	sidebarMargin: '10px',
+	sidebarFooterHeight: '0px',
+	headerHeight: '60px',
+	headerBgColor: '#0074D9',
+	headerColor: '#fff',
+	mainBgColor: '#fff',
+	mainColor: '#000',
+	mainMargin: '20px',
+	mainHeaderMargin: '35px',
+	mainHeaderBgColor: '#eceff1',
+	mainHeaderColor: '#546e7a',
+	treeMargin: '1.3em'
 });
 
 $.fs.writeFile(filePath, mainReport, 'UTF-8');

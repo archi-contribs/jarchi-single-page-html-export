@@ -10,6 +10,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 <html lang="en">
   <head>
     <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>{{modelTitle}}</title>
 
 <!--
@@ -18,12 +19,14 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
     <link rel="stylesheet" href="../resources/picnic-custom.css">
 !-->
 		<style>
-		{{roboto}}
-		{{icon}}
-    {{picnic}}
+			{{roboto}}
+			{{icon}}
+			{{picnic}}
 		</style>
 	  <style>
 /* Application wide configuration */
+			/* Unfortunately IE11 doesn't support CSS vars, so values will be forced through templating system
+			   When supporting IE11 will be out of scope, it will be possible to revert to CSS vars
 	  	:root {
 	  		--sidebar-bg-color: #37474f;
 	  		--sidebar-color: #DDDDDD;
@@ -40,6 +43,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 	  		--main-header-bg-color: #eceff1;
 	  		--main-header-color: #546e7a;
 	  	}
+			*/
 
 /* Generic style */
 		  body {
@@ -85,18 +89,17 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				border-radius: 50%;			/* round background */
 			}
 			/* icon font uses ligature which makes it easier to select icon */
-		  .icon.menu::before { content: "navicon"; }
-		  .icon.close::before { content: "close"; }
-		  .icon.gear::before { content: "cog"; }
-		  .icon.book::before { content: "book"; }
-		  .icon.table::before { content: "table"; }
-		  /* using 'bar-chart' with char code to avoid space issue */
-		  .icon.chart::before { content: "\f080"; }
+		  .icon.menu::before { content: "\f0c9"; }	/* navicon */
+		  .icon.close::before { content: "\f00d"; }	/* close */
+		  .icon.gear::before { content: "\f013"; }	/* cog */
+		  .icon.book::before { content: "\f02d"; }	/* book */
+		  .icon.table::before { content: "\f0ce"; }	/* table */
+		  .icon.chart::before { content: "\f080"; }	/* bar-chart */
 
 /* Override some Picnic defaults */
 		  /* Picnic Tabs */
 	  	.tabs {
-		  	margin-top: var(--main-margin);	/* set some space above tabs */
+		  	margin-top: {{mainMargin}};	/* set some space above tabs */
 		  	text-align: center;					/* center tabs' headers */
 		  }
 			.tabs > input + label {
@@ -113,7 +116,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				margin-top: 18px;						/* must be equal to tabs' header bottom padding */
 				padding-top: 25px;					/* set some space above tabs' content */
 				border-top: 1px solid #e0e0e0;	/* draw a line between tabs' headers and tabs' content */
-				transition: initial;				/* no transition */
+				transition: none;						/* no transition */
 			}
 			/* Picnic Tables */
 			table {
@@ -122,12 +125,12 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				border-top: 1px solid #dddddd;
 			}
 			th {
-				background: initial;				/* unset background */
+				background: #FFF;				/* unset background */
 				font-weight: 700;
 				color: #666666;
 			}
-			tr:nth-child(even) {
-				background: initial;				/* unset background */
+			tr, tr:nth-child(even) {
+				background: #FFF;				/* unset background */
 			}
 			th, td {
 				/* set borders (other border are managed at table level) */
@@ -156,8 +159,8 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				transition: all .3s;		/* make switching state a bit fun */
 		  }
 		  #sidebar:checked ~ .expandable {
-				margin-left: var(--sidebar-width);				/* add some space for sidebar */
-				width: calc(100% - var(--sidebar-width));	/* reset width */
+				margin-left: {{sidebarWidth}};				/* add some space for sidebar */
+				width: calc(100% - {{sidebarWidth}});	/* reset width */
 		  }
 
 /* Sidebar Style */
@@ -165,28 +168,28 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				position: fixed; 				/* make it stick, even on scroll */
 				top: 0;									/* stick to top */
 				height: 100%;						/* takes all vertical space */
-				background-color: var(--sidebar-bg-color);
-		  	color: var(--sidebar-color);
-		  	width: var(--sidebar-width);
+				background-color: {{sidebarBgColor}};
+		  	color: {{sidebarColor}};
+		  	width: {{sidebarWidth}};
 		  }
 		  #hide-sidebar {
 		  	position: absolute;			/* close button is fixed so that any header can go below */
 		  	top: 8px;								/* (header-height - icon-heigh) / 2 */
 		  	/* visual space inside icon (~10px) should be taken into account so
 				   we remove it from right margin */
-		  	right: calc(var(--main-margin) - 10px);
+		  	right: calc({{mainMargin}} - 10px);
 		  }
 		  .sidebar nav.secondary {
-		  	height: calc(100% - var(--header-height) - var(--sidebar-footer-height));
+		  	height: calc(100% - {{headerHeight}} - {{sidebarFooterHeight}});
 		  	overflow: auto;					/* we want scrollbar in main sidebar navs */
-		  	padding: 0 var(--sidebar-margin);
-		  	margin-top: var(--header-height);
+		  	padding: 0 {{sidebarMargin}};
+		  	margin-top: {{headerHeight}};
 		  }
 			.sidebar nav.primary {
 				position: fixed;				/* our footer is fixed on the bottom */
 				bottom: 0;
-				height: var(--sidebar-footer-height);
-				width: var(--sidebar-width);
+				height: {{sidebarFooterHeight}};
+				width: {{sidebarWidth}};
 				text-align: center;
 				background: #00000033;	/* use transparency for darker background */
 				display: flex;					/* this is the trick to middle align buttons and title */
@@ -200,7 +203,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 			#views:checked ~ * nav.primary > label[for=views]
 		  , #queries:checked ~ * nav.primary > label[for=queries]
 		  , #dataviz:checked ~ * nav.primary > label[for=dataviz] {
-		  	color: var(--sidebar-color);
+		  	color: {{sidebarColor}};
 		  }
 			.sidebar ::-webkit-scrollbar {
 				width: 10px;						/* thin but not too much */
@@ -219,7 +222,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 			.top-header {
 				position: fixed;				/* headers are fixed on top */
 				top: 0;
-				height: var(--header-height);
+				height: {{headerHeight}};
 			}
 
 /* Main-Header Style */
@@ -234,8 +237,8 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 			#show-sidebar {
 				/* visual space inside icon (~10px) should be taken into account so
 				   we remove it from left margin and we set a negative right margin */
-				margin-left: calc(var(--main-margin) - 10px);
-				margin-right: calc(-1 * (var(--main-margin) - 10px));
+				margin-left: calc({{mainMargin}} - 10px);
+				margin-right: calc(-1 * ({{mainMargin}} - 10px));
 		  }
 		  #sidebar:checked ~ * #show-sidebar {
 		  	display: none;
@@ -243,39 +246,39 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 			.title {
 				/* use same margin as main. works in both cases (opened/closed)
 				   only because 'show-sidebar' icon has a negative right margin */
-				margin-left: var(--main-margin);
+				margin-left: {{mainMargin}};
 			}
 		  #show-preferences {
 		  	/* visual space inside icon (~10px) should be taken into account so
 				   we remove it from right margin */
-				margin-right: calc(var(--main-margin) - 10px);
+				margin-right: calc({{mainMargin}} - 10px);
 		  }
 
 /* Main-section Style */
 			#main-header {
-				background-color: var(--header-bg-color);
-				color: var(--header-color);
+				background-color: {{headerBgColor}};
+				color: {{headerColor}};
 			}
 		  main {
 		  	/* Todo: check if similar behavior is obtained
 		  	   without position:fixed and overflow:auto */
 				position: fixed; 				/* Make it stick, even on scroll */
-				top: var(--header-height); /* Same as top-header's height */
+				top: {{headerHeight}}; /* Same as top-header's height */
 		  	overflow: auto;					/* we want scrollbar in main section */
 		  	width: 100%;						/* Todo: really needed? */
-				height: calc(100% - var(--header-height));	/* Todo: really needed? */
-		  	background-color: var(--main-bg-color);
-		  	color: var(--main-color);
-		  	padding: var(--main-margin);
+				height: calc(100% - {{headerHeight}});	/* Todo: really needed? */
+		  	background-color: {{mainBgColor}};
+		  	color: {{mainColor}};
+		  	padding: {{mainMargin}};
 		  	padding-top: 0;
 		  }
 
 /* Main Content */
 		  article header {
-				margin: 0 calc(-1 * var(--main-margin));
-				padding: var(--main-header-margin) var(--main-margin);
-				background-color: var(--main-header-bg-color);
-				color: var(--main-header-color);
+				margin: 0 calc(-1 * {{mainMargin}});
+				padding: {{mainHeaderMargin}} {{mainMargin}};
+				background-color: {{mainHeaderBgColor}};
+				color: {{mainHeaderColor}};
 		  }
 		  article header * {
 		  	/* hide/reveal rules use display:table-row which suppress margins and padding.
@@ -285,13 +288,15 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 		  }
 		  .views img {
 				max-width: 100%;
-				margin-top: var(--main-margin);	/* only set top margin because bottom is set by tabs */
+				margin-top: {{mainMargin}};	/* only set top margin because bottom is set by tabs */
 			}
 
 /* Tree */
 		  div.tree {
-		  	--tree-margin: 1.3em;		/* is equal to the icon width with a small additional space */
-		  	padding-left: var(--tree-margin);
+				/* Unfortunately IE11 doesn't support CSS vars, so values will be forced through templating system
+			   When supporting IE11 will be out of scope, it will be possible to revert to CSS vars */
+		  	/*--tree-margin: 1.3em;*/		/* is equal to the icon width with a small additional space */
+		  	padding-left: {{treeMargin}};
 		  	font-size: 0.9em;				/* use a slightly smaller font */
 		  	line-height: 1em;				/* use a smaller line-height (but add spacing between labels) */
 		  }
@@ -299,7 +304,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 				display: none;					/* hide folder content when not checked */
 			}
 			div.tree div {
-				padding-left: var(--tree-margin);
+				padding-left: {{treeMargin}};
 			}
 			div.tree label {
 				display: block;					/* folders and views' name should start on a new line */
@@ -307,20 +312,20 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 			}
 			div.tree label::before {
 				font-family: 'Icon';		/* let's add some space on left for an icon */
-				font-weight: initial;		/* should not be impacted by bold (selected) label */
+				font-weight: normal;		/* should not be impacted by bold (selected) label */
 				display: inline-block;	/* needed to set its width */
-  			margin-left: calc(-1 * var(--tree-margin));
-  			width: var(--tree-margin);
+  			margin-left: calc(-1 * {{treeMargin}});
+  			width: {{treeMargin}};
 			}
 			div.tree label.folder::before {
-				content: "folder";			/* closed folder */
+				content: "\f07b";				/* folder */
 				color: #ffc73f;					/* orange taken from original Archi folder icon */
 			}
 			div.tree input:checked + label.folder::before {
-				content: "folder-open"; /* opened folder */
+				content: "\f07c"; 			/* folder-open */
 			}
 			div.tree label.view::before {
-				content: "share-alt-square";	/* that's the best I found to suggest a view */
+				content: "\f1e1";				/* share-alt-square (that's the best I found to suggest a view) */
 				color: #65a8e3;					/* blue taken from original Archi view icon */
 			}
 
@@ -337,7 +342,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 			input:checked ~ label.switch::before
 			, #markdown:checked ~ * label.switch[for=markdown]::before {
 				transform: rotate(0deg);				/* when on, the toggle icon is used as-is */
-				color: var(--header-bg-color);	/* use the main accent color */
+				color: {{headerBgColor}};	/* use the main accent color */
 			}
 
 /* Generated hidden/reveal rules */
@@ -385,7 +390,7 @@ Copyright (c) 2020 Phillip Beauvoir & Jean-Baptiste Sarrodie - MIT License
 						<div class="fifth text-right">
 							<label for="markdown" class="switch"></label>
 						</div>
-					<div>
+					</div>
 				</section>
 				<footer>
 				  <label for="preferences" class="button right">
