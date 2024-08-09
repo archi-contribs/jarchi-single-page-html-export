@@ -33,9 +33,20 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
+// Set this to false for jArchi 1.6.0 and below or if the Archi preference "Enable Common JS support" is off
+// See https://github.com/archimatetool/archi-scripting-plugin/wiki/Using-Node.js-modules
+const USE_REQUIRE = true;
+
 load(__DIR__ + 'libs/nashorn-polyfills.js');
-load(__DIR__ + 'libs/underscore-min.js');
-load(__DIR__ + 'libs/marked.min.js');
+
+if(USE_REQUIRE) {
+  _ = require(__DIR__ + "libs/underscore-min.js");
+  marked = require(__DIR__ + "libs/marked.min.js");
+}
+else {
+  load(__DIR__ + 'libs/underscore-min.js');
+  load(__DIR__ + 'libs/marked.min.js');
+}
 
 console.show();
 console.clear();
